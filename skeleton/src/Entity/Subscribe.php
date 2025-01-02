@@ -2,15 +2,13 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
-use App\Repository\WallRepository;
+use App\Repository\SubscribeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
-#[ORM\Entity(repositoryClass: WallRepository::class)]
-#[ApiResource]
-class Wall
+#[ORM\Entity(repositoryClass: SubscribeRepository::class)]
+class Subscribe
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
@@ -18,12 +16,13 @@ class Wall
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     private ?Uuid $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'walls')]
+    #[ORM\ManyToOne(inversedBy: 'subscribes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $action = null;
+    #[ORM\ManyToOne(inversedBy: 'subscribes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $subscriber = null;
 
     public function getId(): ?Uuid
     {
@@ -42,14 +41,14 @@ class Wall
         return $this;
     }
 
-    public function getAction(): ?string
+    public function getSubscriber(): ?User
     {
-        return $this->action;
+        return $this->subscriber;
     }
 
-    public function setAction(string $action): static
+    public function setSubscriber(?User $subscriber): static
     {
-        $this->action = $action;
+        $this->subscriber = $subscriber;
 
         return $this;
     }

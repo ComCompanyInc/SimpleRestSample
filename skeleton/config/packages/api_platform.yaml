@@ -8,7 +8,7 @@ api_platform:
 #            mime_types:
 #                application/json
     docs_formats:
-        jsonld: ['application/ld+json']
+        jsonld: ['application/json'] #jsonld: ['application/ld+json']
         jsonopenapi: ['application/vnd.openapi+json']
         html: ['text/html']
     defaults:
