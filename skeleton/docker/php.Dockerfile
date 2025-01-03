@@ -15,3 +15,5 @@ RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php')
 RUN apk add --no-cache --update icu-libs icu-data-full tzdata
 ENV TZ=Europe/Moscow
 RUN cp /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+
+RUN echo 'realpath_cache_ttl = 7200' >> /php.ini;

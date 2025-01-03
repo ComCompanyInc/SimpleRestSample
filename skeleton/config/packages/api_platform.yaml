@@ -4,9 +4,10 @@ api_platform:
     formats:
 #        jsonld: ['application/ld+json']
         json: ['application/json'] # замена jsonLd -> json
+#        jsonld: []
 
     docs_formats:
-        jsonld: ['application/json'] #jsonld: ['application/ld+json']
+        json: ['application/json'] #jsonld: ['application/ld+json']
         jsonopenapi: ['application/vnd.openapi+json']
         html: ['text/html']
     defaults:
