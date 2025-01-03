@@ -2,20 +2,22 @@
 
 namespace App\Service;
 
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class HttpClientService
 {
     public function __construct(
-        private HttpClientInterface $client,
+        private HttpClientInterface $client
     ) {
     }
 
-    public function fetchGitHubInformation(): array
+    public function getInformation(string $host): array
     {
+
         $response = $this->client->request(
             'GET',
-            'localhost:8000//api/contents'
+            $host . '/api/contents'
         );
 
         $statusCode = $response->getStatusCode();

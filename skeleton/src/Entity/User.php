@@ -44,6 +44,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 //            )
 //        ),
         new GetCollection(
+//            uriTemplate: '/news_tape',
             openapi: new Operation(
                 tags:[
                     'Пользователь'
