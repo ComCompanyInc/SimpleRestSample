@@ -23,13 +23,20 @@ class HttpClientService
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      */
-    public function getInformation(string $host): array
+    public function getInformation(string $host, string $route, int $page = 1, string $filter = null): array
     {
 
-        $response = $this->client->request(
-            'GET',
-            $host . '/api/contents'
-        );
+        if($filter == null) {
+            $response = $this->client->request(
+                'GET',
+                $host . $route . '?page=' . $page
+            );
+        } else {
+            $response = $this->client->request(
+                'GET',
+                $host . $route . '?page=' . $page . '&' . $filter
+            );
+        }
 
         $statusCode = $response->getStatusCode();
         // $statusCode = 200
@@ -42,4 +49,34 @@ class HttpClientService
 
         return $content;
     }
+
+    public function getInformationByIdSearch(string $host, array $data, string $searchingField, string $searchingFieldPlural, string $filter = null): array
+    {
+        $result = [];
+
+        //dump('________foreach_________');
+        foreach($data as $item) {
+            foreach ($item as $key => $value) {
+                //dump($key);
+                if ($key == $searchingField) {
+//                    dump('/api/' . $searchingFieldPlural);
+//                    dd($filter . '=' . $value);
+                    $result[] = $this->getInformation($host, '/api/' . $searchingFieldPlural, 1, $filter . '=' . $value);
+                }
+            }
+        }
+        //dump('________end foreach_________');
+
+        return $result;
+    }
+
+//    public function dataReview(string $host, string $route, int $amountOfPageElements): array {
+//
+//        while(true) {
+//           if()
+//
+//            $this->getInformation($host, $route, );
+//        }
+//    }
+
 }

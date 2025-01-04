@@ -5,11 +5,12 @@ namespace App\Provider;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Service\HttpClientService;
+use App\Service\NewsService;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ApiProvider implements ProviderInterface
 {
-    public function __construct(private readonly HttpClientService $client, private readonly ParameterBagInterface $parameterBag)
+    public function __construct(private readonly NewsService $newsService, private readonly ParameterBagInterface $parameterBag)
     {
     }
 
@@ -18,6 +19,6 @@ class ApiProvider implements ProviderInterface
         $apiHost = $this->parameterBag->get('api_base_url');
         // TODO: Implement provide() method.
 
-        return $this->client->getInformation($apiHost);
+        return $this->newsService->getNewsTape($apiHost, '/api/users', '/api/news', '/api/contents', 1);
     }
 }

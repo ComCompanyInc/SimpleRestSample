@@ -24,27 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(/*openapiContext: ['tags' => ['Пользователь']]*/
     operations: [
-//        new GetCollection(
-//            openapi: new Operation(
-//                tags:[
-//                    'Пользователь'
-//                ],
-//                summary: 'Получить пользователей',
-//                description: 'Получить весь список пользователей',
-//                parameters: [
-//                    new Parameter(
-//                        name: 'page',
-//                        in: 'query',
-//                        schema: [
-//                            'type' => 'integer',
-//                            'default' => 1,
-//                        ]
-//                    )
-//                ]
-//            )
-//        ),
         new GetCollection(
-//            uriTemplate: '/news_tape',
             openapi: new Operation(
                 tags:[
                     'Пользователь'
@@ -62,9 +42,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                     )
                 ],
             ),
-            provider: ApiProvider::class,
-
-            //provider: HttpClientService::class
         ),
         new Get(
             openapi: new Operation(
