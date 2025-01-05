@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -173,6 +175,7 @@ class News
     #[Assert\NotNull]
     private ?string $title = null;
 
+    #[ApiFilter(SearchFilter::class, properties: ['content' => 'exact'])]
     #[ORM\ManyToOne(inversedBy: 'news')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Content $content = null;

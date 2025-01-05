@@ -17,6 +17,7 @@ class HttpClientService
     }
 
     /**
+     * Берет массив данных по роуту
      * @throws RedirectionExceptionInterface
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
@@ -50,33 +51,103 @@ class HttpClientService
         return $content;
     }
 
-    public function getInformationByIdSearch(string $host, array $data, string $searchingField, string $searchingFieldPlural, string $filter = null): array
+    /**
+     * Формирует массив данных из другой таблицы по ключу из заиси (ключ берется из массива ids, если он пустой то берется из самого массива с данными - $data)
+     * @param string $host
+     * Хост сайта
+     * @param array $data
+     * Сформированный массив с данными
+     * @param string $searchingField
+     * Ключ, по которому производить поиск
+     * @param string $searchingFieldPlural
+     * Название таблицы во множественном числе (о названию роута в API, где хранятся данные)
+     * @param string $filter
+     * Название параметра для фильтра в другой таблице
+     * @param array $ids
+     * Массив с ключами по которому производить поиск в API по заданному фильтру
+     * @return array
+     * Возвращает массив с данными отфильтрованными по фильтру API
+     * @throws ClientExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     */
+    public function getInformationByIdSearch(string $host, array $data, string $searchingField, string $searchingFieldPlural, string $filter, array $ids = []): array
     {
         $result = [];
 
-        //dump('________foreach_________');
-        foreach($data as $item) {
-            foreach ($item as $key => $value) {
-                //dump($key);
-                if ($key == $searchingField) {
-//                    dump('/api/' . $searchingFieldPlural);
-//                    dd($filter . '=' . $value);
-                    $result[] = $this->getInformation($host, '/api/' . $searchingFieldPlural, 1, $filter . '=' . $value);
+        if(empty($ids)) {
+            foreach ($data as $item) {
+                foreach ($item as $key => $value) {
+                    if ($key == $searchingField) {
+                        $result[] = $this->getInformation($host, '/api/' . $searchingFieldPlural, 1, $filter . '=' . $value);
+                    }
                 }
             }
+        } else {
+            foreach ($ids as $value) {
+                $result[] = $this->getInformation($host, '/api/' . $searchingFieldPlural, 1, $filter . '=' . $value);
+            }
         }
-        //dump('________end foreach_________');
 
         return $result;
     }
 
-//    public function dataReview(string $host, string $route, int $amountOfPageElements): array {
-//
-//        while(true) {
-//           if()
-//
-//            $this->getInformation($host, $route, );
-//        }
-//    }
+    /**
+     * Взять все Id из массива данных по названию поля (для фильтров таблиц API)
+     * @param array $data
+     * Сформированный массив с данными
+     * @param string $searchingField
+     * Ключ, по которому производить поиск
+     * @param string $nameFieldForFilter
+     * Название параметра для фильтра в другой таблице
+     * @param int $amountOfCutSymbols
+     * Количество символов которое надо вырезать из строки с ключом чтобы достать только ключ (без роута)
+     * @return array
+     * Возвращает сформированный массив с ключами для фильтров таблиц API (поиску по ним данных)
+     */
+    public function getIdFromData(array $data, string $searchingField, string $nameFieldForFilter, int $amountOfCutSymbols/*, int $lengthOfElements*/): array {
+        $result = [];
+
+        foreach($data as $item) {
+            foreach ($item as $key => $value) {
+                //dump('value=');
+                //dump($value);
+                if ($key == $searchingField) {
+                    if(!empty($value)) {
+                        if(is_array($value)) {
+                            $result[] = '&' . $nameFieldForFilter . '[]=' . substr($value[0], $amountOfCutSymbols);
+                        } else {
+                            $result[] = '&' . $nameFieldForFilter . '[]=' . substr($value, $amountOfCutSymbols);
+                        }
+                    }
+                }
+            }
+        }
+
+//        dump('____________________');
+
+        return $result;
+    }
+
+    /**
+     * Приводит массив к одному типу вложенности элементов (для корректного еребора в последующих функциях)
+     * @param array $data
+     * @return array
+     */
+    public function setArrayToOrdinaryType(array $data): array {
+        $result = [];
+
+        foreach ($data as $item) {
+            if(!empty($item)) {
+                foreach ($item as $value) {
+                    $result[] = $value;
+                }
+            }
+        }
+
+        return $result;
+    }
 
 }
