@@ -19,6 +19,6 @@ class ApiProvider implements ProviderInterface
         $apiHost = $this->parameterBag->get('api_base_url');
         // TODO: Implement provide() method.
 
-        return $this->newsService->getNewsTape($apiHost, '/api/users', '/api/news', '/api/contents', 1);
+        return $this->newsService->getNewsTape($apiHost, '/api/users', /*'/api/news', '/api/contents',*/ 1);
     }
 }

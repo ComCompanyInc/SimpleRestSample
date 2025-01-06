@@ -128,7 +128,9 @@ class HttpClientService
 
 //        dump('____________________');
 
-        return $result;
+        return $this->divideArrayForFilter($result, 15);
+
+        //return $result;
     }
 
     /**
@@ -145,6 +147,28 @@ class HttpClientService
                     $result[] = $value;
                 }
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Разбить строку ключей для фильтра API на несколько частей
+     * @param array $data
+     * Массив с ключами для фильтра API таблицы
+     * @param int $itemsForDivision
+     * количество ключей в одной строке
+     * @return array
+     */
+    public function divideArrayForFilter(array $data, int $itemsForDivision = 30): array {
+        $result = [];
+
+        // Разбиваем массив на части по $itemsForDivision элементов
+        $chunks = array_chunk($data, $itemsForDivision);
+
+        // Объединяем элементы каждого чанка в строку
+        foreach ($chunks as $chunk) {
+            $result[] = implode('', $chunk);
         }
 
         return $result;

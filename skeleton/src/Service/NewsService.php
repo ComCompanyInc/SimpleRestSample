@@ -25,12 +25,36 @@ class NewsService
         $newsArray = $this->client->setArrayToOrdinaryType($news);// упорядочивание массива к одному типу вложенности элементов (здесь - для вывода)
 
         // вывод массивов
-        dump($user);
-        dump($contentArray);
-        dump($newsArray);
+//        dump($user);
+//        dump($contentArray);
+//        dump($newsArray);
 
-        dd(0);
+        // формирование массива новостей с их авторами для ответа
+        $result = [];
 
-        return [];
+        foreach ($user as $userItem) { // перебор массива с пользователями
+            $news = []; // массив для сбора множества новостей одной персоны
+            foreach ($contentArray as $contentItem) { // перебор массива с содержимым новости
+                foreach ($newsArray as $newsItem) { // перебор массива новостей
+                    if(substr($contentItem['author'], 11) != $userItem['id']) {
+                        continue;
+                    }// если ключи из таблиц User и Content совпадают то продолжать
+
+                    if (substr($newsItem['content'], 14) != $contentItem['id']) {
+                        continue;
+                    }// если ключи из таблиц News и Content совпадают то продолжать
+
+                    $news[] = ['title' => $newsItem, 'text' => $contentItem]; // добавить в массив news новый элемент с заголовком и содержимым новости
+                }
+            }
+
+            // формирование ответа (в цикле персон т.к. новости нужно взять у всех персон)
+            $result[] = [
+                'author' => $userItem,
+                'news' => $news,
+            ];
+        }
+
+        return $result;
     }
 }
