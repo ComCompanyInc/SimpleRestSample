@@ -174,4 +174,28 @@ class HttpClientService
         return $result;
     }
 
+    /**
+     * Сформировать массив данных из исходного массива по фильтру определенного поля с определенным значением
+     * @param array $data
+     * Массив данных который нужно отфильтровать по значению определенного поля
+     * @param string $fieldFilterName
+     * имя поля по которому будет производиться фильтрация
+     * @param string $fieldFilterValue
+     * значение поля по которому будет производиться фильтрация
+     * @return array
+     * Отфильтрованный массив по значению определенного поля
+     */
+    public function filterDataByField(array $data, string $fieldFilterName, string $fieldFilterValue): array {
+        $result = [];
+
+        foreach ($data as $item) {
+            foreach ($item as $key => $value) {
+                if(($key == $fieldFilterName) && ($value == $fieldFilterValue)) {
+                    $result[] = $item;
+                }
+            }
+        }
+
+        return $result;
+    }
 }

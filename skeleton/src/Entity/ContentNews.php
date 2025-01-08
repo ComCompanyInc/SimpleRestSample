@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ContentNewsRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,6 +24,7 @@ class ContentNews
     #[ORM\JoinColumn(nullable: false)]
     private ?Content $content = null;
 
+    #[ApiFilter(SearchFilter::class, properties: ['news' => 'exact'])]
     #[ORM\ManyToOne(inversedBy: 'contentNews')]
     #[ORM\JoinColumn(nullable: false)]
     private ?News $news = null;

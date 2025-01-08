@@ -43,6 +43,35 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ],
             ),
         ),
+        new GetCollection(
+            uriTemplate: '/author_news_tape',
+            openapi: new Operation(
+                tags:[
+                    'Пользователь'
+                ],
+                summary: 'Получить Новости',
+                description: 'Получить список новостей пользователей',
+                parameters: [
+                    new Parameter(
+                        name: 'page',
+                        in: 'query',
+                        schema: [
+                            'type' => 'integer',
+                            'default' => 1,
+                        ]
+                    ),
+                    new Parameter(
+                        name: 'idUser',
+                        in: 'query',
+                        schema: [
+                            'type' => 'string',
+                            'default' => '',
+                        ]
+                    )
+                ],
+            ),
+            provider: ApiProvider::class,
+        ),
         new Get(
             openapi: new Operation(
                 tags:[
